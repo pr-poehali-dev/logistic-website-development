@@ -61,10 +61,12 @@ const Index = () => {
   ];
 
   const routes = [
-    { from: 'Китай', to: 'Россия', time: '25-30 дней', ports: 'Шанхай → Владивосток' },
-    { from: 'Европа', to: 'Россия', time: '20-25 дней', ports: 'Роттердам → Санкт-Петербург' },
-    { from: 'Турция', to: 'Россия', time: '15-20 дней', ports: 'Стамбул → Новороссийск' },
-    { from: 'США', to: 'Россия', time: '35-40 дней', ports: 'Лос-Анджелес → Владивосток' }
+    { from: 'Китай', to: 'Владивосток', time: '15-20 дней', ports: 'Шанхай, Нинбо, Гуанчжоу', icon: 'Anchor' },
+    { from: 'Корея/Япония', to: 'Владивосток', time: '7-10 дней', ports: 'Пусан, Токио, Иокогама', icon: 'Anchor' },
+    { from: 'Европа', to: 'Санкт-Петербург', time: '20-25 дней', ports: 'Роттердам, Гамбург, Антверпен', icon: 'Anchor' },
+    { from: 'Скандинавия', to: 'Санкт-Петербург', time: '5-7 дней', ports: 'Хельсинки, Стокгольм, Гётеборг', icon: 'Anchor' },
+    { from: 'Турция', to: 'Новороссийск', time: '7-10 дней', ports: 'Стамбул, Измир, Мерсин', icon: 'Anchor' },
+    { from: 'Средиземноморье', to: 'Новороссийск', time: '10-15 дней', ports: 'Пирей, Генуя, Барселона', icon: 'Anchor' }
   ];
 
   const certificates = [
@@ -234,23 +236,46 @@ const Index = () => {
             <h2 className="text-4xl font-bold mb-4">География перевозок</h2>
             <p className="text-xl opacity-90">Основные направления и маршруты</p>
           </div>
-          <div className="mb-12">
+          <div className="mb-12 relative">
             <img
-              src="https://cdn.poehali.dev/projects/18f9c6ca-19d5-473e-96fd-a8382bf78ba0/files/bfd4af17-9431-45cb-90af-7975f84c9637.jpg"
+              src="https://cdn.poehali.dev/projects/18f9c6ca-19d5-473e-96fd-a8382bf78ba0/files/47a9cc33-4d1d-434d-940b-6720d70ae5b5.jpg"
               alt="География перевозок"
-              className="rounded-2xl shadow-2xl mx-auto max-w-4xl"
+              className="rounded-2xl shadow-2xl mx-auto max-w-5xl w-full"
             />
+            <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg">
+              <div className="flex items-center space-x-4 text-primary">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-accent rounded-full"></div>
+                  <span className="text-sm font-medium">Владивосток</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-accent rounded-full"></div>
+                  <span className="text-sm font-medium">Санкт-Петербург</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-accent rounded-full"></div>
+                  <span className="text-sm font-medium">Новороссийск</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {routes.map((route, index) => (
-              <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
+              <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover-scale">
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span>{route.from}</span>
-                    <Icon name="ArrowRight" size={20} />
-                    <span>{route.to}</span>
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge className="bg-secondary text-primary font-semibold">{route.to}</Badge>
+                    <Icon name="Ship" size={20} className="text-secondary" />
+                  </div>
+                  <CardTitle className="text-lg mb-2">
+                    {route.from} → {route.to}
                   </CardTitle>
-                  <CardDescription className="text-white/70">{route.ports}</CardDescription>
+                  <CardDescription className="text-white/80 text-sm">
+                    <div className="flex items-start space-x-2">
+                      <Icon name="MapPin" size={14} className="mt-0.5 text-secondary flex-shrink-0" />
+                      <span>{route.ports}</span>
+                    </div>
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center space-x-2">
