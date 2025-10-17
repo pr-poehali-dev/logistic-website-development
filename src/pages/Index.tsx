@@ -7,6 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
@@ -15,6 +18,20 @@ const Index = () => {
   const [weight, setWeight] = useState('');
   const [route, setRoute] = useState('');
   const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const { toast } = useToast();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    phone: '',
+    email: '',
+    cargoType: '',
+    cargoWeight: '',
+    routeFrom: '',
+    routeTo: '',
+    additionalInfo: ''
+  });
 
   const services = [
     {
@@ -68,6 +85,26 @@ const Index = () => {
     }
   };
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Заявка отправлена!",
+      description: "Наш менеджер свяжется с вами в ближайшее время.",
+    });
+    setIsFormOpen(false);
+    setFormData({
+      name: '',
+      company: '',
+      phone: '',
+      email: '',
+      cargoType: '',
+      cargoWeight: '',
+      routeFrom: '',
+      routeTo: '',
+      additionalInfo: ''
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
@@ -88,10 +125,14 @@ const Index = () => {
                 </button>
               ))}
             </div>
-            <Button className="bg-secondary hover:bg-secondary/90 text-primary">
-              <Icon name="Phone" size={16} className="mr-2" />
-              Связаться
-            </Button>
+            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-secondary hover:bg-secondary/90 text-primary">
+                  <Icon name="Phone" size={16} className="mr-2" />
+                  Связаться
+                </Button>
+              </DialogTrigger>
+            </Dialog>
           </div>
         </div>
       </nav>
@@ -375,10 +416,157 @@ const Index = () => {
               <div className="opacity-90">Москва, Пресненская наб.</div>
             </div>
           </div>
-          <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-primary">
-            <Icon name="Send" size={18} className="mr-2" />
-            Отправить заявку
-          </Button>
+          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+            <DialogTrigger asChild>
+              <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-primary">
+                <Icon name="Send" size={18} className="mr-2" />
+                Отправить заявку
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl">Заявка на расчет стоимости</DialogTitle>
+                <DialogDescription>
+                  Заполните форму и мы свяжемся с вами в течение 30 минут
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleFormSubmit} className="space-y-4 mt-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Имя *</Label>
+                    <Input
+                      id="name"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      placeholder="Иван Иванов"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="company">Компания</Label>
+                    <Input
+                      id="company"
+                      value={formData.company}
+                      onChange={(e) => setFormData({...formData, company: e.target.value})}
+                      placeholder="ООО Рога и Копыта"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Телефон *</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      placeholder="+7 (999) 123-45-67"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      placeholder="email@example.com"
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="cargoType">Тип груза *</Label>
+                    <Select required onValueChange={(value) => setFormData({...formData, cargoType: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите тип" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="general">Генеральные грузы</SelectItem>
+                        <SelectItem value="container-20">Контейнер 20ft</SelectItem>
+                        <SelectItem value="container-40">Контейнер 40ft</SelectItem>
+                        <SelectItem value="reefer">Рефрижератор</SelectItem>
+                        <SelectItem value="oversized">Негабаритный груз</SelectItem>
+                        <SelectItem value="dangerous">Опасный груз</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="cargoWeight">Вес груза (тонн) *</Label>
+                    <Input
+                      id="cargoWeight"
+                      type="number"
+                      required
+                      value={formData.cargoWeight}
+                      onChange={(e) => setFormData({...formData, cargoWeight: e.target.value})}
+                      placeholder="10"
+                      min="0.1"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="routeFrom">Откуда *</Label>
+                    <Input
+                      id="routeFrom"
+                      required
+                      value={formData.routeFrom}
+                      onChange={(e) => setFormData({...formData, routeFrom: e.target.value})}
+                      placeholder="Шанхай, Китай"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="routeTo">Куда *</Label>
+                    <Input
+                      id="routeTo"
+                      required
+                      value={formData.routeTo}
+                      onChange={(e) => setFormData({...formData, routeTo: e.target.value})}
+                      placeholder="Москва, Россия"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="additionalInfo">Дополнительная информация</Label>
+                  <Textarea
+                    id="additionalInfo"
+                    value={formData.additionalInfo}
+                    onChange={(e) => setFormData({...formData, additionalInfo: e.target.value})}
+                    placeholder="Укажите дополнительные требования: упаковка, страхование, срочность доставки и т.д."
+                    rows={4}
+                  />
+                </div>
+
+                <div className="bg-muted/50 p-4 rounded-lg">
+                  <div className="flex items-start space-x-3">
+                    <Icon name="Info" className="text-accent mt-0.5" size={20} />
+                    <div className="text-sm text-muted-foreground">
+                      <p className="font-medium text-foreground mb-1">Что дальше?</p>
+                      <ul className="space-y-1">
+                        <li>• Менеджер свяжется с вами в течение 30 минут</li>
+                        <li>• Уточнит детали и предложит оптимальный маршрут</li>
+                        <li>• Подготовит коммерческое предложение</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <Button type="submit" className="flex-1 bg-accent hover:bg-accent/90">
+                    <Icon name="Send" size={18} className="mr-2" />
+                    Отправить заявку
+                  </Button>
+                  <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)}>
+                    Отмена
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </section>
 
