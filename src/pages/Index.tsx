@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [activeSection, setActiveSection] = useState('main');
   const [containerType, setContainerType] = useState('');
   const [weight, setWeight] = useState('');
   const [route, setRoute] = useState('');
@@ -27,62 +24,57 @@ const Index = () => {
     phone: '',
     email: '',
     cargoType: '',
-    cargoWeight: '',
-    routeFrom: '',
-    routeTo: '',
-    additionalInfo: ''
+    message: ''
   });
 
   const services = [
     {
       icon: 'Ship',
-      title: 'Морские перевозки',
-      description: 'Контейнерные перевозки FCL и LCL по всему миру',
-      features: ['20ft и 40ft контейнеры', 'Рефрижераторные контейнеры', 'Спецгрузы']
-    },
-    {
-      icon: 'Plane',
-      title: 'Авиаперевозки',
-      description: 'Экспресс-доставка грузов авиатранспортом',
-      features: ['Срочные грузы', 'Температурный режим', 'Таможенное оформление']
+      title: 'Морские контейнерные перевозки',
+      description: 'FCL и LCL перевозки по всему миру',
+      features: ['20ft, 40ft, 40HC контейнеры', 'Рефрижераторные контейнеры', 'Специальное оборудование', 'Сборные грузы LCL']
     },
     {
       icon: 'Truck',
-      title: 'Автоперевозки',
-      description: 'Доставка от двери до двери по России и СНГ',
-      features: ['FTL и LTL', 'Мультимодальные перевозки', 'Складская логистика']
+      title: 'Мультимодальные перевозки',
+      description: 'Доставка от двери до двери',
+      features: ['Комбинация видов транспорта', 'Оптимальные маршруты', 'Контроль на всех этапах', 'Страхование грузов']
     },
     {
-      icon: 'FileText',
+      icon: 'Warehouse',
+      title: 'Складская логистика',
+      description: 'Хранение и обработка грузов',
+      features: ['Временное хранение', 'Паллетирование', 'Упаковка и маркировка', 'Консолидация']
+    },
+    {
+      icon: 'FileCheck',
       title: 'Таможенное оформление',
-      description: 'Полное сопровождение таможенных процедур',
-      features: ['Декларирование', 'Консультации', 'Документооборот']
+      description: 'Полное сопровождение ВЭД',
+      features: ['Декларирование', 'Сертификация', 'Консультации по ВЭД', 'Документооборот']
     }
   ];
 
   const routes = [
-    { from: 'Китай', to: 'Владивосток', time: '15-20 дней', ports: 'Шанхай, Нинбо, Гуанчжоу', icon: 'Anchor' },
-    { from: 'Корея/Япония', to: 'Владивосток', time: '7-10 дней', ports: 'Пусан, Токио, Иокогама', icon: 'Anchor' },
-    { from: 'Европа', to: 'Санкт-Петербург', time: '20-25 дней', ports: 'Роттердам, Гамбург, Антверпен', icon: 'Anchor' },
-    { from: 'Скандинавия', to: 'Санкт-Петербург', time: '5-7 дней', ports: 'Хельсинки, Стокгольм, Гётеборг', icon: 'Anchor' },
-    { from: 'Турция', to: 'Новороссийск', time: '7-10 дней', ports: 'Стамбул, Измир, Мерсин', icon: 'Anchor' },
-    { from: 'Средиземноморье', to: 'Новороссийск', time: '10-15 дней', ports: 'Пирей, Генуя, Барселона', icon: 'Anchor' }
+    { from: 'Китай', to: 'Владивосток', time: '15-20 дней', ports: 'Шанхай, Нинбо, Гуанчжоу' },
+    { from: 'Корея/Япония', to: 'Владивосток', time: '7-10 дней', ports: 'Пусан, Токио, Иокогама' },
+    { from: 'Европа', to: 'Санкт-Петербург', time: '20-25 дней', ports: 'Роттердам, Гамбург, Антверпен' },
+    { from: 'Скандинавия', to: 'Санкт-Петербург', time: '5-7 дней', ports: 'Хельсинки, Стокгольм, Гётеборг' },
+    { from: 'Турция', to: 'Новороссийск', time: '7-10 дней', ports: 'Стамбул, Измир, Мерсин' },
+    { from: 'Средиземноморье', to: 'Новороссийск', time: '10-15 дней', ports: 'Пирей, Генуя, Барселона' }
   ];
 
-  const certificates = [
-    'ISO 9001:2015 - Система менеджмента качества',
-    'ISO 14001:2015 - Экологический менеджмент',
-    'FIATA - Международная федерация экспедиторов',
-    'Лицензия таможенного представителя',
-    'Сертификат безопасности цепи поставок'
+  const advantages = [
+    { icon: 'TrendingUp', number: '15+', text: 'лет на рынке логистики' },
+    { icon: 'Users', number: '500+', text: 'довольных клиентов' },
+    { icon: 'Ship', number: '2000+', text: 'контейнеров в год' },
+    { icon: 'CheckCircle', number: '98%', text: 'доставок в срок' }
   ];
 
   const calculatePrice = () => {
     if (containerType && weight && route) {
-      const basePrice = containerType === '20ft' ? 1500 : 2500;
-      const weightFactor = parseFloat(weight) * 10;
-      const routeMultiplier = route === 'china' ? 1.0 : route === 'europe' ? 1.2 : 1.1;
-      const total = (basePrice + weightFactor) * routeMultiplier;
+      const basePrice = containerType === '20ft' ? 85000 : containerType === '40ft' ? 145000 : containerType === '40hc' ? 155000 : 185000;
+      const routeMultiplier = route === 'china' ? 1.0 : route === 'europe' ? 1.3 : route === 'turkey' ? 0.9 : 1.1;
+      const total = basePrice * routeMultiplier;
       setCalculatedPrice(Math.round(total));
     }
   };
@@ -91,7 +83,7 @@ const Index = () => {
     e.preventDefault();
     toast({
       title: "Заявка отправлена!",
-      description: "Наш менеджер свяжется с вами в ближайшее время.",
+      description: "Наш менеджер свяжется с вами в течение 30 минут.",
     });
     setIsFormOpen(false);
     setFormData({
@@ -100,125 +92,184 @@ const Index = () => {
       phone: '',
       email: '',
       cargoType: '',
-      cargoWeight: '',
-      routeFrom: '',
-      routeTo: '',
-      additionalInfo: ''
+      message: ''
     });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Icon name="Box" className="text-primary" size={32} />
-              <span className="text-2xl font-bold text-primary">Формула Логистики</span>
+    <div className="min-h-screen">
+      <header className="bg-primary text-white py-4 px-6 sticky top-0 z-50 shadow-lg">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <div className="bg-secondary rounded-lg p-2">
+              <Icon name="Container" className="text-primary" size={28} />
             </div>
-            <div className="hidden md:flex space-x-6">
-              {['Главная', 'Услуги', 'География', 'О компании', 'Тарифы', 'Контакты'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => setActiveSection(item.toLowerCase())}
-                  className="text-sm font-medium hover:text-accent transition-colors"
-                >
-                  {item}
-                </button>
-              ))}
+            <div>
+              <h1 className="text-2xl font-bold">Формула Логистики</h1>
+              <p className="text-sm text-white/80">Международные контейнерные перевозки</p>
             </div>
-            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-secondary hover:bg-secondary/90 text-primary">
-                  <Icon name="Phone" size={16} className="mr-2" />
-                  Связаться
-                </Button>
-              </DialogTrigger>
-            </Dialog>
           </div>
+          <div className="hidden md:flex items-center space-x-6">
+            <a href="#services" className="hover:text-secondary transition-colors">Услуги</a>
+            <a href="#routes" className="hover:text-secondary transition-colors">Маршруты</a>
+            <a href="#calculator" className="hover:text-secondary transition-colors">Калькулятор</a>
+            <a href="#contact" className="hover:text-secondary transition-colors">Контакты</a>
+          </div>
+          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-secondary text-primary hover:bg-secondary/90 font-semibold">
+                <Icon name="Phone" size={18} className="mr-2" />
+                Заказать звонок
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Оставьте заявку</DialogTitle>
+                <DialogDescription>
+                  Заполните форму, и наш менеджер свяжется с вами в течение 30 минут
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleFormSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Ваше имя *</Label>
+                  <Input
+                    id="name"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="Иван Петров"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="company">Компания</Label>
+                  <Input
+                    id="company"
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    placeholder="ООО Торговый Дом"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Телефон *</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+7 (999) 123-45-67"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="ivan@example.com"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="cargoType">Тип груза</Label>
+                  <Input
+                    id="cargoType"
+                    value={formData.cargoType}
+                    onChange={(e) => setFormData({ ...formData, cargoType: e.target.value })}
+                    placeholder="Например: мебель, электроника"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="message">Дополнительная информация</Label>
+                  <Textarea
+                    id="message"
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    placeholder="Маршрут, сроки, особые требования..."
+                    rows={3}
+                  />
+                </div>
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
+                  Отправить заявку
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
-      </nav>
+      </header>
 
-      <section className="pt-32 pb-20 px-6">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 fade-in">
-              <Badge className="bg-accent text-white">Международные перевозки с 2010 года</Badge>
-              <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-                Контейнерные перевозки
-                <span className="text-accent block mt-2">по всему миру</span>
-              </h1>
-              <p className="text-xl text-muted-foreground">
-                Надежная доставка грузов морским транспортом. Оптимальные маршруты, прозрачные тарифы, полное таможенное сопровождение.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="bg-primary hover:bg-primary/90">
-                  <Icon name="Calculator" size={18} className="mr-2" />
-                  Рассчитать стоимость
-                </Button>
-                <Button size="lg" variant="outline">
-                  <Icon name="FileText" size={18} className="mr-2" />
-                  Наши документы
-                </Button>
-              </div>
-              <div className="grid grid-cols-3 gap-6 pt-8">
-                <div>
-                  <div className="text-3xl font-bold text-primary">15+</div>
-                  <div className="text-sm text-muted-foreground">лет опыта</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary">50+</div>
-                  <div className="text-sm text-muted-foreground">стран доставки</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary">2000+</div>
-                  <div className="text-sm text-muted-foreground">клиентов</div>
-                </div>
-              </div>
-            </div>
-            <div className="relative">
-              <img
-                src="https://cdn.poehali.dev/projects/18f9c6ca-19d5-473e-96fd-a8382bf78ba0/files/54ff697c-b4dd-4a54-a46b-9f7cc17337ca.jpg"
-                alt="Контейнерные перевозки"
-                className="rounded-2xl shadow-2xl hover-scale"
-              />
-              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg">
-                <div className="flex items-center space-x-4">
-                  <div className="bg-accent/10 p-3 rounded-full">
-                    <Icon name="TrendingUp" className="text-accent" size={24} />
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-primary">98%</div>
-                    <div className="text-sm text-muted-foreground">доставок в срок</div>
-                  </div>
-                </div>
-              </div>
+      <section className="relative bg-gradient-to-br from-primary via-primary/95 to-primary/80 text-white py-24 px-6 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-secondary rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
+        </div>
+        <div className="container mx-auto relative z-10">
+          <div className="max-w-3xl">
+            <Badge className="bg-secondary text-primary mb-6 text-sm px-4 py-2">
+              <Icon name="Award" size={16} className="mr-2" />
+              Надёжный партнёр с 2009 года
+            </Badge>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Международные контейнерные перевозки по выгодным тарифам
+            </h1>
+            <p className="text-xl mb-8 text-white/90 leading-relaxed">
+              Доставка FCL и LCL грузов из Китая, Европы, Турции и других стран. 
+              Работаем с ведущими морскими линиями. Гарантируем соблюдение сроков.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button size="lg" className="bg-secondary text-primary hover:bg-secondary/90 font-semibold text-lg px-8">
+                <Icon name="Calculator" size={20} className="mr-2" />
+                Рассчитать стоимость
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-primary font-semibold text-lg px-8">
+                <Icon name="Phone" size={20} className="mr-2" />
+                +7 (495) 123-45-67
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-white">
+      <section className="py-16 px-6 bg-white">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Наши услуги</h2>
-            <p className="text-xl text-muted-foreground">Комплексные решения для вашего бизнеса</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {advantages.map((item, index) => (
+              <div key={index} className="text-center group hover:scale-105 transition-transform">
+                <div className="bg-primary/5 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
+                  <Icon name={item.icon as any} className="text-primary" size={32} />
+                </div>
+                <div className="text-4xl font-bold text-primary mb-2">{item.number}</div>
+                <div className="text-muted-foreground">{item.text}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="services" className="py-20 px-6 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="bg-primary/10 text-primary mb-4">Наши услуги</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Комплексные логистические решения</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Полный спектр услуг для организации международных перевозок
+            </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
-              <Card key={index} className="hover-scale border-2 hover:border-accent transition-all">
+              <Card key={index} className="hover:shadow-xl transition-all hover:-translate-y-2 border-2">
                 <CardHeader>
-                  <div className="bg-accent/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
-                    <Icon name={service.icon as any} className="text-accent" size={28} />
+                  <div className="bg-primary/10 w-14 h-14 rounded-xl flex items-center justify-center mb-4">
+                    <Icon name={service.icon as any} className="text-primary" size={28} />
                   </div>
-                  <CardTitle className="text-xl">{service.title}</CardTitle>
-                  <CardDescription>{service.description}</CardDescription>
+                  <CardTitle className="text-xl mb-2">{service.title}</CardTitle>
+                  <CardDescription className="text-base">{service.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
                     {service.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start space-x-2">
-                        <Icon name="Check" className="text-secondary mt-1" size={16} />
+                        <Icon name="Check" className="text-secondary mt-1 flex-shrink-0" size={18} />
                         <span className="text-sm">{feature}</span>
                       </li>
                     ))}
@@ -230,11 +281,14 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-gradient-to-br from-primary to-primary/90 text-white">
+      <section id="routes" className="py-20 px-6 bg-gradient-to-br from-primary to-primary/90 text-white">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">География перевозок</h2>
-            <p className="text-xl opacity-90">Основные направления и маршруты</p>
+            <Badge className="bg-secondary text-primary mb-4">География работы</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Основные направления перевозок</h2>
+            <p className="text-xl opacity-90 max-w-2xl mx-auto">
+              Работаем с ведущими портами России и мира
+            </p>
           </div>
           <div className="mb-12 relative">
             <img
@@ -261,7 +315,7 @@ const Index = () => {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {routes.map((route, index) => (
-              <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover-scale">
+              <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/15 transition-all hover:scale-105">
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
                     <Badge className="bg-secondary text-primary font-semibold">{route.to}</Badge>
@@ -280,7 +334,7 @@ const Index = () => {
                 <CardContent>
                   <div className="flex items-center space-x-2">
                     <Icon name="Clock" size={16} className="text-secondary" />
-                    <span className="text-sm font-medium">{route.time}</span>
+                    <span className="text-sm font-medium">Срок доставки: {route.time}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -289,74 +343,79 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-20 px-6">
+      <section id="calculator" className="py-20 px-6 bg-white">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Калькулятор стоимости</h2>
-            <p className="text-xl text-muted-foreground">Рассчитайте стоимость перевозки за 30 секунд</p>
+            <Badge className="bg-primary/10 text-primary mb-4">Калькулятор</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Рассчитайте стоимость перевозки</h2>
+            <p className="text-xl text-muted-foreground">
+              Предварительный расчёт за 1 минуту
+            </p>
           </div>
-          <Card className="shadow-xl">
-            <CardContent className="pt-6">
+          <Card className="shadow-2xl border-2">
+            <CardContent className="pt-8">
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-2">
                   <Label htmlFor="container">Тип контейнера</Label>
                   <Select onValueChange={setContainerType}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Выберите тип" />
+                      <SelectValue placeholder="Выберите тип контейнера" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="20ft">20ft стандартный</SelectItem>
                       <SelectItem value="40ft">40ft стандартный</SelectItem>
                       <SelectItem value="40hc">40ft High Cube</SelectItem>
-                      <SelectItem value="reefer">Рефрижератор</SelectItem>
+                      <SelectItem value="reefer">Рефрижератор 40ft</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="weight">Вес груза (тонн)</Label>
-                  <Input
-                    id="weight"
-                    type="number"
-                    placeholder="Введите вес"
-                    value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="route">Маршрут</Label>
+                  <Label htmlFor="route-calc">Маршрут</Label>
                   <Select onValueChange={setRoute}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Выберите маршрут" />
+                      <SelectValue placeholder="Выберите направление" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="china">Китай → Россия</SelectItem>
-                      <SelectItem value="europe">Европа → Россия</SelectItem>
-                      <SelectItem value="turkey">Турция → Россия</SelectItem>
-                      <SelectItem value="usa">США → Россия</SelectItem>
+                      <SelectItem value="china">Китай → Владивосток</SelectItem>
+                      <SelectItem value="europe">Европа → Санкт-Петербург</SelectItem>
+                      <SelectItem value="turkey">Турция → Новороссийск</SelectItem>
+                      <SelectItem value="korea">Корея → Владивосток</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2">
-                  <Label>Дополнительные услуги</Label>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="outline" className="cursor-pointer hover:bg-accent hover:text-white transition-colors">
-                      Страхование
-                    </Badge>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-accent hover:text-white transition-colors">
-                      Таможня
-                    </Badge>
-                  </div>
-                </div>
               </div>
-              <Button onClick={calculatePrice} className="w-full bg-accent hover:bg-accent/90" size="lg">
-                <Icon name="Calculator" size={18} className="mr-2" />
+              <div className="space-y-2 mb-6">
+                <Label htmlFor="weight">Вес груза (тонн)</Label>
+                <Input
+                  id="weight"
+                  type="number"
+                  placeholder="Введите вес груза"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                />
+              </div>
+              <Button 
+                onClick={calculatePrice} 
+                className="w-full bg-primary hover:bg-primary/90 text-lg py-6"
+                disabled={!containerType || !weight || !route}
+              >
+                <Icon name="Calculator" size={20} className="mr-2" />
                 Рассчитать стоимость
               </Button>
               {calculatedPrice && (
-                <div className="mt-6 p-6 bg-accent/10 rounded-lg text-center">
-                  <div className="text-sm text-muted-foreground mb-2">Ориентировочная стоимость</div>
-                  <div className="text-4xl font-bold text-accent">${calculatedPrice.toLocaleString()}</div>
-                  <div className="text-sm text-muted-foreground mt-2">Точную стоимость уточняйте у менеджера</div>
+                <div className="mt-6 p-6 bg-primary/5 rounded-lg border-2 border-primary/20">
+                  <div className="text-center">
+                    <p className="text-muted-foreground mb-2">Предварительная стоимость:</p>
+                    <p className="text-4xl font-bold text-primary mb-4">
+                      {calculatedPrice.toLocaleString('ru-RU')} ₽
+                    </p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      * Итоговая стоимость зависит от характеристик груза и дополнительных услуг
+                    </p>
+                    <Button onClick={() => setIsFormOpen(true)} className="bg-secondary text-primary hover:bg-secondary/90">
+                      Получить точный расчёт
+                    </Button>
+                  </div>
                 </div>
               )}
             </CardContent>
@@ -364,276 +423,216 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-white">
+      <section className="py-20 px-6 bg-muted/30">
         <div className="container mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold mb-6">О компании</h2>
-              <div className="space-y-4 text-lg text-muted-foreground">
-                <p>
-                  <strong className="text-primary">Формула Логистики</strong> — надежный партнер в сфере международных контейнерных перевозок с 2010 года.
-                </p>
-                <p>
-                  Мы специализируемся на морских перевозках грузов по всему миру, предлагая оптимальные решения для бизнеса любого масштаба.
-                </p>
-                <div className="grid grid-cols-2 gap-4 pt-4">
-                  <div className="flex items-center space-x-3">
-                    <Icon name="Shield" className="text-accent" size={24} />
-                    <span className="font-medium">Полное страхование</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Icon name="Clock" className="text-accent" size={24} />
-                    <span className="font-medium">Доставка в срок</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Icon name="Users" className="text-accent" size={24} />
-                    <span className="font-medium">Личный менеджер</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Icon name="Award" className="text-accent" size={24} />
-                    <span className="font-medium">Сертификаты ISO</span>
-                  </div>
+          <div className="text-center mb-12">
+            <Badge className="bg-primary/10 text-primary mb-4">Преимущества</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Почему выбирают нас</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon name="Shield" className="text-primary" size={32} />
                 </div>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold mb-6">Документы и сертификаты</h3>
-              <Accordion type="single" collapsible className="w-full">
-                {certificates.map((cert, index) => (
-                  <AccordionItem key={index} value={`item-${index}`}>
-                    <AccordionTrigger className="text-left">
-                      <div className="flex items-center space-x-3">
-                        <Icon name="FileCheck" className="text-secondary" size={20} />
-                        <span>{cert}</span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground">
-                      Документ подтверждает соответствие международным стандартам качества и безопасности.
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+                <CardTitle>Прозрачные условия</CardTitle>
+                <CardDescription>
+                  Фиксированные ставки без скрытых платежей. Полный контроль бюджета.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon name="Headset" className="text-primary" size={32} />
+                </div>
+                <CardTitle>Персональный менеджер</CardTitle>
+                <CardDescription>
+                  Личный специалист на всех этапах перевозки. Всегда на связи 24/7.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon name="Globe" className="text-primary" size={32} />
+                </div>
+                <CardTitle>Онлайн-трекинг</CardTitle>
+                <CardDescription>
+                  Отслеживайте местоположение груза в режиме реального времени.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon name="FileCheck" className="text-primary" size={32} />
+                </div>
+                <CardTitle>Все документы</CardTitle>
+                <CardDescription>
+                  Берём на себя таможенное оформление и подготовку всей документации.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon name="Zap" className="text-primary" size={32} />
+                </div>
+                <CardTitle>Оперативность</CardTitle>
+                <CardDescription>
+                  Быстрая обработка заявок и оформление перевозки за 1-2 дня.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon name="Award" className="text-primary" size={32} />
+                </div>
+                <CardTitle>Гарантии качества</CardTitle>
+                <CardDescription>
+                  Сертифицированная компания. Страхование грузов на всех этапах.
+                </CardDescription>
+              </CardHeader>
+            </Card>
           </div>
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-gradient-to-br from-accent to-accent/90 text-white">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-4xl font-bold mb-6">Готовы начать сотрудничество?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Свяжитесь с нами для расчета стоимости и обсуждения деталей вашей перевозки
-          </p>
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
-              <Icon name="Phone" size={32} className="mx-auto mb-3" />
-              <div className="font-semibold mb-1">Телефон</div>
-              <div className="opacity-90">+7 (495) 123-45-67</div>
+      <section id="contact" className="py-20 px-6 bg-gradient-to-br from-primary to-primary/90 text-white">
+        <div className="container mx-auto max-w-5xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <Badge className="bg-secondary text-primary mb-6">Свяжитесь с нами</Badge>
+              <h2 className="text-4xl font-bold mb-6">Готовы начать работу?</h2>
+              <p className="text-xl opacity-90 mb-8">
+                Получите консультацию специалиста и индивидуальное коммерческое предложение
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="bg-secondary/20 p-3 rounded-full">
+                    <Icon name="Phone" className="text-secondary" size={24} />
+                  </div>
+                  <div>
+                    <div className="text-sm opacity-80">Телефон</div>
+                    <div className="text-xl font-semibold">+7 (495) 123-45-67</div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="bg-secondary/20 p-3 rounded-full">
+                    <Icon name="Mail" className="text-secondary" size={24} />
+                  </div>
+                  <div>
+                    <div className="text-sm opacity-80">Email</div>
+                    <div className="text-xl font-semibold">info@formula-logistics.ru</div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="bg-secondary/20 p-3 rounded-full">
+                    <Icon name="MapPin" className="text-secondary" size={24} />
+                  </div>
+                  <div>
+                    <div className="text-sm opacity-80">Офис</div>
+                    <div className="text-xl font-semibold">Москва, ул. Морская, д. 15</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
-              <Icon name="Mail" size={32} className="mx-auto mb-3" />
-              <div className="font-semibold mb-1">Email</div>
-              <div className="opacity-90">info@formula-log.ru</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
-              <Icon name="MapPin" size={32} className="mx-auto mb-3" />
-              <div className="font-semibold mb-1">Офис</div>
-              <div className="opacity-90">Москва, Пресненская наб.</div>
-            </div>
-          </div>
-          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-            <DialogTrigger asChild>
-              <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-primary">
-                <Icon name="Send" size={18} className="mr-2" />
-                Отправить заявку
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="text-2xl">Заявка на расчет стоимости</DialogTitle>
-                <DialogDescription>
-                  Заполните форму и мы свяжемся с вами в течение 30 минут
-                </DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleFormSubmit} className="space-y-4 mt-4">
-                <div className="grid md:grid-cols-2 gap-4">
+            <Card className="shadow-2xl">
+              <CardHeader>
+                <CardTitle>Оставьте заявку</CardTitle>
+                <CardDescription>Ответим в течение 30 минут</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleFormSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Имя *</Label>
+                    <Label htmlFor="contact-name">Ваше имя *</Label>
                     <Input
-                      id="name"
+                      id="contact-name"
                       required
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      placeholder="Иван Иванов"
+                      placeholder="Иван Петров"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="company">Компания</Label>
+                    <Label htmlFor="contact-phone">Телефон *</Label>
                     <Input
-                      id="company"
-                      value={formData.company}
-                      onChange={(e) => setFormData({...formData, company: e.target.value})}
-                      placeholder="ООО Рога и Копыта"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Телефон *</Label>
-                    <Input
-                      id="phone"
+                      id="contact-phone"
                       type="tel"
                       required
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
                       placeholder="+7 (999) 123-45-67"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
+                    <Label htmlFor="contact-email">Email</Label>
                     <Input
-                      id="email"
+                      id="contact-email"
                       type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      placeholder="email@example.com"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="cargoType">Тип груза *</Label>
-                    <Select required onValueChange={(value) => setFormData({...formData, cargoType: value})}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите тип" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="general">Генеральные грузы</SelectItem>
-                        <SelectItem value="container-20">Контейнер 20ft</SelectItem>
-                        <SelectItem value="container-40">Контейнер 40ft</SelectItem>
-                        <SelectItem value="reefer">Рефрижератор</SelectItem>
-                        <SelectItem value="oversized">Негабаритный груз</SelectItem>
-                        <SelectItem value="dangerous">Опасный груз</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="cargoWeight">Вес груза (тонн) *</Label>
-                    <Input
-                      id="cargoWeight"
-                      type="number"
-                      required
-                      value={formData.cargoWeight}
-                      onChange={(e) => setFormData({...formData, cargoWeight: e.target.value})}
-                      placeholder="10"
-                      min="0.1"
-                      step="0.1"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="routeFrom">Откуда *</Label>
-                    <Input
-                      id="routeFrom"
-                      required
-                      value={formData.routeFrom}
-                      onChange={(e) => setFormData({...formData, routeFrom: e.target.value})}
-                      placeholder="Шанхай, Китай"
+                      placeholder="ivan@example.com"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="routeTo">Куда *</Label>
-                    <Input
-                      id="routeTo"
-                      required
-                      value={formData.routeTo}
-                      onChange={(e) => setFormData({...formData, routeTo: e.target.value})}
-                      placeholder="Москва, Россия"
+                    <Label htmlFor="contact-message">Сообщение</Label>
+                    <Textarea
+                      id="contact-message"
+                      placeholder="Опишите ваш груз и маршрут..."
+                      rows={3}
                     />
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="additionalInfo">Дополнительная информация</Label>
-                  <Textarea
-                    id="additionalInfo"
-                    value={formData.additionalInfo}
-                    onChange={(e) => setFormData({...formData, additionalInfo: e.target.value})}
-                    placeholder="Укажите дополнительные требования: упаковка, страхование, срочность доставки и т.д."
-                    rows={4}
-                  />
-                </div>
-
-                <div className="bg-muted/50 p-4 rounded-lg">
-                  <div className="flex items-start space-x-3">
-                    <Icon name="Info" className="text-accent mt-0.5" size={20} />
-                    <div className="text-sm text-muted-foreground">
-                      <p className="font-medium text-foreground mb-1">Что дальше?</p>
-                      <ul className="space-y-1">
-                        <li>• Менеджер свяжется с вами в течение 30 минут</li>
-                        <li>• Уточнит детали и предложит оптимальный маршрут</li>
-                        <li>• Подготовит коммерческое предложение</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <Button type="submit" className="flex-1 bg-accent hover:bg-accent/90">
-                    <Icon name="Send" size={18} className="mr-2" />
+                  <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
                     Отправить заявку
                   </Button>
-                  <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)}>
-                    Отмена
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
-      <footer className="bg-primary text-white py-12 px-6">
+      <footer className="bg-primary/95 text-white py-12 px-6">
         <div className="container mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <Icon name="Box" size={28} />
-                <span className="text-xl font-bold">Формула Логистики</span>
+                <div className="bg-secondary rounded-lg p-2">
+                  <Icon name="Container" className="text-primary" size={24} />
+                </div>
+                <span className="font-bold text-xl">Формула Логистики</span>
               </div>
-              <p className="text-sm opacity-80">Международные контейнерные перевозки с 2010 года</p>
+              <p className="text-white/70 text-sm">
+                Надёжный партнёр в международных контейнерных перевозках с 2009 года
+              </p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Услуги</h4>
-              <ul className="space-y-2 text-sm opacity-80">
+              <ul className="space-y-2 text-sm text-white/70">
                 <li>Морские перевозки</li>
-                <li>Авиаперевозки</li>
-                <li>Автоперевозки</li>
                 <li>Таможенное оформление</li>
+                <li>Складская логистика</li>
+                <li>Мультимодальные перевозки</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Компания</h4>
-              <ul className="space-y-2 text-sm opacity-80">
-                <li>О нас</li>
-                <li>Документы</li>
-                <li>Вакансии</li>
-                <li>Контакты</li>
+              <h4 className="font-semibold mb-4">Направления</h4>
+              <ul className="space-y-2 text-sm text-white/70">
+                <li>Китай - Россия</li>
+                <li>Европа - Россия</li>
+                <li>Турция - Россия</li>
+                <li>Корея - Россия</li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Контакты</h4>
-              <ul className="space-y-2 text-sm opacity-80">
+              <ul className="space-y-2 text-sm text-white/70">
                 <li>+7 (495) 123-45-67</li>
-                <li>info@formula-log.ru</li>
-                <li>Москва, Пресненская наб.</li>
+                <li>info@formula-logistics.ru</li>
+                <li>Москва, ул. Морская, д. 15</li>
+                <li>Пн-Пт: 9:00 - 18:00</li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-white/20 mt-8 pt-8 text-center text-sm opacity-80">
-            © 2024 Формула Логистики. Все права защищены.
+          <div className="border-t border-white/20 pt-8 text-center text-sm text-white/60">
+            <p>© 2024 Формула Логистики. Все права защищены.</p>
           </div>
         </div>
       </footer>
